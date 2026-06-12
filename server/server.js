@@ -7,6 +7,10 @@ const nodemailer = require('nodemailer');
 const Project = require('./Project');
 const Contact = require('./Contact');
 const Skill = require('./Skill');
+const multer = require('multer');
+const path = require('path');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -27,6 +31,26 @@ const transporter = nodemailer.createTransport({
         pass: process.env.EMAIL_PASS
     }
 });
+
+// Multer configuration
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'uploads/');
+    },
+    filename: (req, file, cb) => {
+        cb(null, Date.now() + '-' + file.originalname);
+    }
+});
+
+const fileFilter = (req, file, cb) => {
+    if (file.mimetype === 'application/pdf') {
+        cb(null, true);
+    } else {
+        cb(new Error('Only PDF files are allowed'), false);
+    }
+};
+
+const upload = multer({ storage, fileFilter });
 
 // Root route
 app.get('/', (req, res) => {
@@ -109,6 +133,59 @@ app.delete('/api/skills/:id', async (req, res) => {
     }
 });
 
+// Admin login
+app.post('/api/admin/login', async (req, res) => {
+    try {
+        const { password } = req.body;
+
+        const isMatch = await bcrypt.compare(
+            password,
+            await bcrypt.hash(process.env.ADMIN_PASSWORD, 10)
+        );
+
+        if (!isMatch) {
+            return res.status(401).json({ error: 'Invalid password' });
+        }
+
+        const token = jwt.sign(
+            { admin: true },
+            process.env.JWT_SECRET,
+            { expiresIn: '24h' }
+        );
+
+        res.json({ token });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Middleware to protect admin routes
+const verifyToken = (req, res, next) => {
+    const token = req.headers.authorization?.split(' ')[1];
+
+    if (!token) {
+        return res.status(401).json({ error: 'No token provided' });
+    }
+
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        req.admin = decoded;
+        next();
+    } catch (err) {
+        res.status(401).json({ error: 'Invalid token' });
+    }
+};
+
+// Protected admin route — get all contact messages
+app.get('/api/admin/messages', verifyToken, async (req, res) => {
+    try {
+        const messages = await Contact.find().sort({ createdAt: -1 });
+        res.json(messages);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
 // POST contact form submission
 app.post('/api/contact', async (req, res) => {
     try {
@@ -171,6 +248,55 @@ app.get('/api/contact', async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 });
+
+// POST upload a document
+app.post('/api/documents', upload.single('file'), (req, res) => {
+    try {
+        if (!req.file) {
+            return res.status(400).json({ error: 'No file uploaded' });
+        }
+        res.status(201).json({
+            message: 'File uploaded successfully',
+            filename: req.file.filename,
+            originalname: req.file.originalname,
+            path: `/uploads/${req.file.filename}`
+        });
+    } catch (err) {
+        res.status(400).json({ error: err.message });
+    }
+});
+
+// GET list all uploaded documents
+app.get('/api/documents', (req, res) => {
+    const fs = require('fs');
+    const uploadsDir = path.join(__dirname, 'uploads');
+    fs.readdir(uploadsDir, (err, files) => {
+        if (err) {
+            return res.status(500).json({ error: 'Could not read uploads folder' });
+        }
+        const pdfs = files.filter(f => f.endsWith('.pdf'));
+        res.json(pdfs.map(f => ({
+            filename: f,
+            originalname: f.replace(/^\d+-/, ''),
+            path: `/uploads/${f}`
+        })));
+    });
+});
+
+// DELETE a document
+app.delete('/api/documents/:filename', (req, res) => {
+    const fs = require('fs');
+    const filePath = path.join(__dirname, 'uploads', req.params.filename);
+    fs.unlink(filePath, (err) => {
+        if (err) {
+            return res.status(500).json({ error: 'Could not delete file' });
+        }
+        res.json({ message: 'File deleted successfully' });
+    });
+});
+
+// Serve uploaded files statically
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);

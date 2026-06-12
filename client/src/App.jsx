@@ -6,6 +6,7 @@ import Skills from './components/Skills'
 import ProjectCard from './components/ProjectCard'
 import Contact from './components/Contact'
 import ParticleField from './components/ParticleField'
+import Documents from './components/Documents'
 
 function App() {
   const [projects, setProjects] = useState([])
@@ -40,6 +41,9 @@ function App() {
         <Skills />
         <div className="divider"></div>
         <section className="section" id="projects">
+        <Documents />
+        <div className="divider"></div>
+        <section className="section" id="projects"></section>
           <p className="section-label">Work</p>
           <h2>My Projects</h2>
           <div className="projects-grid">

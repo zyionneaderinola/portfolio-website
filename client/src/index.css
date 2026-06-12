@@ -439,3 +439,91 @@ footer p {
   color: var(--sage-light);
   border-color: var(--sage);
 }
+
+/* DOCUMENTS */
+.documents-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  max-width: 600px;
+}
+
+.documents-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.document-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.25rem;
+  background: var(--bg-card);
+  border: 0.5px solid var(--border);
+  transition: border-color 0.25s;
+}
+
+.document-item:hover {
+  border-color: rgba(122, 158, 126, 0.4);
+}
+
+.document-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.document-icon {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem;
+  padding: 0.25rem 0.4rem;
+  background: rgba(107, 76, 59, 0.15);
+  border: 0.5px solid rgba(107, 76, 59, 0.4);
+  color: var(--brown-light);
+  letter-spacing: 0.05em;
+}
+
+.document-name {
+  font-size: 0.95rem;
+  color: var(--text);
+}
+
+.document-download {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-decoration: none;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: color 0.2s;
+}
+
+.document-download:hover {
+  color: var(--sage-light);
+}
+
+.upload-label {
+  display: inline-block;
+  padding: 0.85rem 2rem;
+  background: transparent;
+  border: 1px solid var(--sage);
+  color: var(--sage-light);
+  font-family: 'Space Mono', monospace;
+  font-size: 0.85rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.25s;
+}
+
+.upload-label:hover {
+  background: var(--sage);
+  color: var(--bg);
+}
+
+.no-documents {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  font-style: italic;
+}

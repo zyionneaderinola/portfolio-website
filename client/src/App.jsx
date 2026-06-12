@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import './index.css'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
+import Skills from './components/Skills'
 import ProjectCard from './components/ProjectCard'
 import Contact from './components/Contact'
 import ParticleField from './components/ParticleField'
@@ -35,6 +36,8 @@ function App() {
       <div style={{ position: 'relative', zIndex: 1 }}>
         <Navbar />
         <Hero />
+        <div className="divider"></div>
+        <Skills />
         <div className="divider"></div>
         <section className="section" id="projects">
           <p className="section-label">Work</p>

@@ -6,6 +6,7 @@ const cors = require('cors');
 const nodemailer = require('nodemailer');
 const Project = require('./Project');
 const Contact = require('./Contact');
+const Skill = require('./Skill');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -74,6 +75,37 @@ app.put('/api/projects/:id', async (req, res) => {
         res.json(project);
     } catch (err) {
         res.status(400).json({ error: err.message });
+    }
+});
+
+// GET all skills
+app.get('/api/skills', async (req, res) => {
+    try {
+        const skills = await Skill.find().sort({ order: 1 });
+        res.json(skills);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// POST a new skill category
+app.post('/api/skills', async (req, res) => {
+    try {
+        const skill = new Skill(req.body);
+        await skill.save();
+        res.status(201).json(skill);
+    } catch (err) {
+        res.status(400).json({ error: err.message });
+    }
+});
+
+// DELETE a skill category
+app.delete('/api/skills/:id', async (req, res) => {
+    try {
+        await Skill.findByIdAndDelete(req.params.id);
+        res.json({ message: 'Skill deleted successfully' });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
     }
 });
 

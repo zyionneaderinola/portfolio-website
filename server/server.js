@@ -77,6 +77,10 @@ app.get('/', (req, res) => {
     res.send('Hello, Portfolio Server is Running!');
 });
 
+app.get('/ping', (req, res) => {
+    res.json({ status: 'awake' })
+})
+
 // GET all projects
 app.get('/api/projects', async (req, res) => {
     try {

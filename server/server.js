@@ -15,6 +15,23 @@ const bcrypt = require('bcryptjs');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+const http = require('http');
+const { Server } = require('socket.io');
+const server = http.createServer(app);
+const io = new Server(server, {
+    cors: {
+        origin: 'http://localhost:5173',
+        methods: ['GET', 'POST']
+    }
+});
+
+io.on('connection', (socket) => {
+    console.log('Admin connected:', socket.id);
+    socket.on('disconnect', () => {
+        console.log('Admin disconnected:', socket.id);
+    });
+});
+
 app.use(express.json());
 app.use(cors());
 
@@ -208,6 +225,13 @@ app.post('/api/contact', async (req, res) => {
         const contact = new Contact(req.body);
         await contact.save();
 
+        // Emit real-time notification to admin dashboard
+        io.emit('newMessage', {
+            name: req.body.name,
+            email: req.body.email,
+            createdAt: new Date()
+        });
+
         await transporter.sendMail({
             from: process.env.EMAIL_USER,
             to: process.env.EMAIL_TO,
@@ -313,6 +337,6 @@ app.delete('/api/documents/:filename', verifyToken, (req, res) => {
 
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });

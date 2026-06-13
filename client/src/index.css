@@ -1043,3 +1043,24 @@ footer p {
   color: #E8EDE9;
   border-color: #6B4C3B;
 }
+
+.read-btn {
+  background: transparent;
+  border: 0.5px solid rgba(122, 158, 126, 0.4);
+  color: var(--sage-light);
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.3rem 0.7rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+  text-decoration: none;
+}
+
+.read-btn:hover {
+  background: var(--sage);
+  color: var(--bg);
+  border-color: var(--sage);
+}

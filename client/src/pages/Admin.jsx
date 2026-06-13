@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import ParticleField from '../components/ParticleField'
+import { io } from 'socket.io-client'
 
 function Admin() {
   const [activeTab, setActiveTab] = useState('overview')
@@ -23,6 +24,24 @@ function Admin() {
     fetchProjects()
     fetchSkills()
     fetchDocuments()
+  }, [])
+
+  useEffect(() => {
+    const socket = io('http://localhost:3000')
+
+    socket.on('newMessage', (data) => {
+        setUnreadCount(prev => prev + 1)
+        setMessages(prev => [{
+            _id: Date.now().toString(),
+            name: data.name,
+            email: data.email,
+            message: '(click to refresh for full message)',
+            createdAt: data.createdAt,
+            read: false
+        }, ...prev])
+    })
+
+    return () => socket.disconnect()
   }, [])
 
   const authHeaders = {
@@ -308,26 +327,66 @@ function Admin() {
             </div>
           )}
 
-          {/* STATISTICS TAB */}
-          {activeTab === 'stats' && (
+          {/* DOCUMENTS TAB */}
+          {activeTab === 'documents' && (
             <div className="admin-section">
-              <h2>Statistics</h2>
-              <div className="stats-grid">
-                <div className="stat-card">
-                  <p className="stat-label">Projects</p>
-                  <h3 className="stat-number">{stats.projects}</h3>
-                </div>
-                <div className="stat-card">
-                  <p className="stat-label">Skills</p>
-                  <h3 className="stat-number">{stats.skills}</h3>
-                </div>
-                <div className="stat-card">
-                  <p className="stat-label">Documents</p>
-                  <h3 className="stat-number">{stats.documents}</h3>
-                </div>
+              <h2>Documents <span className="count">({documents.length})</span></h2>
+
+              <label className="upload-label" style={{ marginBottom: '2rem', display: 'inline-block' }}>
+               + Upload Document
+              <input
+              type="file"
+              accept=".pdf"
+              onChange={async (e) => {
+                const file = e.target.files[0]
+                if (!file) return
+                const formData = new FormData()
+                formData.append('file', file)
+                try {
+                  const response = await fetch('http://localhost:3000/api/documents', {
+                  method: 'POST',
+                  headers: { 'Authorization': `Bearer ${token}` },
+                  body: formData
+                })
+                if (response.ok) fetchDocuments()
+              } catch (err) {
+                console.error('Upload failed:', err)
+            }
+          }}
+          style={{ display: 'none' }}
+        />
+      </label>
+
+      {documents.length === 0 ? (
+        <p className="no-documents">No documents uploaded yet.</p>
+      ) : (
+        documents.map(doc => (
+          <div key={doc.filename} className="admin-item">
+            <div>
+              <h3>{doc.originalname}</h3>
+              <p>{doc.filename}</p>
+            </div>
+            <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
+              <a
+                href={`http://localhost:3000${doc.path}`}
+                target="_blank"
+                rel="noreferrer"
+                className="read-btn"
+              >
+              View
+              </a>
+              <button
+              className="delete-btn"
+              onClick={() => deleteDocument(doc.filename)}
+              >
+                Delete
+                </button>
               </div>
             </div>
-          )}
+          ))
+        )}
+      </div>
+    )}
 
           {/* SKILLS TAB */}
           {activeTab === 'skills' && (
@@ -382,6 +441,7 @@ function AddProjectForm({ token, onSuccess }) {
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value })
   }
+
 
   const handleSubmit = async (e) => {
     e.preventDefault()

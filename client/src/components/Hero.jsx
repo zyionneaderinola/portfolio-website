@@ -6,7 +6,8 @@ function Hero() {
       <h2>Building the web, one stack at a time.</h2>
       <p>
         I craft dynamic, cloud-connected applications using the MERN stack.
-        Currently expanding into Cloud Computing, on a trajectory toward ML/AI and Software Engineering.
+        On a trajectory toward Cloud Computing, ML/AI, Data Science & Analytics,
+        and Software Engineering.
       </p>
       <a href="#projects" className="hero-cta">View My Work</a>
     </section>

@@ -20,11 +20,13 @@ const { Server } = require('socket.io');
 const server = http.createServer(app);
 const io = new Server(server, {
     cors: {
-        origin: 'http://localhost:5173',
+        origin: [
+            'http://localhost:5173',
+            'https://portfolio-website-beta-five-92.vercel.app.vercel.app'
+        ],
         methods: ['GET', 'POST']
     }
 });
-
 io.on('connection', (socket) => {
     console.log('Admin connected:', socket.id);
     socket.on('disconnect', () => {
@@ -33,7 +35,12 @@ io.on('connection', (socket) => {
 });
 
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+    origin: [
+        'http://localhost:5173',
+        'https://portfolio-website-beta-five-92.vercel.app.vercel.app'
+    ]
+}));
 
 mongoose.connect(process.env.MONGO_URI)
     .then(() => console.log('Connected to MongoDB'))

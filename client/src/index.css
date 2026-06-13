@@ -145,7 +145,7 @@ nav ul li a:hover { color: var(--brown); }
 
 .hero-cta:hover {
   background: var(--brown-dark);
-    color: #fff; /* text turns white on hover */
+  color: #fff;
   text-shadow: 0 0 8px rgba(107, 76, 59, 0.6);
 }
 
@@ -170,6 +170,7 @@ nav ul li a:hover { color: var(--brown); }
   color: var(--text-muted);
   margin-bottom: 3rem;
 }
+
 /* PROJECTS GRID */
 .projects-grid {
   display: grid;
@@ -366,11 +367,11 @@ footer p {
 }
 
 .optional {
-    color: var(--text-muted);
-    font-size: 0.7rem;
-    font-style: italic;
-    text-transform: none;
-    letter-spacing: 0;
+  color: var(--text-muted);
+  font-size: 0.7rem;
+  font-style: italic;
+  text-transform: none;
+  letter-spacing: 0;
 }
 
 /* SKILLS */
@@ -445,6 +446,7 @@ footer p {
   display: flex;
   flex-direction: column;
   gap: 2rem;
+  width: 100%;
   max-width: 600px;
 }
 
@@ -526,4 +528,518 @@ footer p {
   color: var(--text-muted);
   font-size: 0.9rem;
   font-style: italic;
+}
+
+/* LOGIN PAGE */
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.login-card {
+  background: var(--bg-card);
+  border: 0.5px solid var(--border);
+  padding: 3rem;
+  width: 100%;
+  max-width: 400px;
+}
+
+.login-card h1 {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 2rem;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* PASSWORD TOGGLE */
+.password-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-wrapper input {
+  width: 100%;
+  padding-right: 3rem;
+}
+
+.eye-toggle {
+  position: absolute;
+  right: 0.75rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  color: var(--text-muted);
+  transition: color 0.2s;
+}
+
+.eye-toggle:hover {
+  color: var(--sage-light);
+}
+
+/* ========================
+   ADMIN DASHBOARD
+   ======================== */
+
+.admin-page {
+  min-height: 100vh;
+  width: 100%;
+  background: #0D0F0E;
+  position: relative;
+  isolation: isolate;
+}
+
+.admin-content-wrapper {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  width: 100%;
+  min-height: 100vh;
+}
+
+/* SIDEBAR */
+.admin-sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 64px;
+  background: rgba(19, 23, 20, 0.85);
+  border-right: 0.5px solid rgba(122, 158, 126, 0.15);
+  display: flex;
+  flex-direction: column;
+  z-index: 999;
+  transition: width 0.3s ease;
+  overflow: hidden;
+}
+
+.admin-sidebar.open {
+  width: 260px;
+}
+
+/* Particle layer inside sidebar */
+.sidebar-particles {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 260px;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+/* Sidebar content above particles */
+.admin-sidebar-header,
+.admin-nav,
+.logout-btn {
+  position: relative;
+  z-index: 1;
+}
+
+.admin-sidebar-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.5rem 1rem;
+  border-bottom: 0.5px solid rgba(122, 158, 126, 0.15);
+  min-height: 72px;
+}
+
+.sidebar-toggle {
+  background: transparent;
+  border: none;
+  color: #8A9E8D;
+  cursor: pointer;
+  padding: 0.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: color 0.2s;
+  width: 32px;
+  height: 32px;
+}
+
+.sidebar-toggle:hover {
+  color: #A8C5AC;
+}
+
+.admin-brand {
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.admin-brand h2 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #E8EDE9;
+  margin: 0.15rem 0 0;
+}
+
+.admin-brand .section-label {
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  color: #7A9E7E;
+  margin-bottom: 0;
+}
+
+.admin-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  flex: 1;
+  padding: 1rem 0;
+  overflow: hidden;
+}
+
+.admin-nav-btn {
+  background: transparent;
+  border: none;
+  border-left: 2px solid transparent;
+  color: #8A9E8D;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.9rem;
+  padding: 0.85rem 1.25rem;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  white-space: nowrap;
+  width: 100%;
+  overflow: hidden;
+  min-height: 48px;
+}
+
+.admin-nav-btn:hover {
+  color: #E8EDE9;
+  border-left-color: #6B4C3B;
+  background: rgba(107, 76, 59, 0.05);
+}
+
+.admin-nav-btn.active {
+  color: #A8C5AC;
+  border-left-color: #7A9E7E;
+  background: rgba(122, 158, 126, 0.05);
+}
+
+.nav-label {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.badge {
+  background: #7A9E7E;
+  color: #0D0F0E;
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 0.15rem 0.45rem;
+  border-radius: 20px;
+  font-family: 'Space Mono', monospace;
+  flex-shrink: 0;
+  margin-left: 0.5rem;
+}
+
+.logout-btn {
+  background: transparent;
+  border: none;
+  border-top: 0.5px solid rgba(122, 158, 126, 0.15);
+  color: #9C7060;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 1.25rem;
+  cursor: pointer;
+  transition: all 0.25s;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.logout-btn:hover {
+  background: rgba(107, 76, 59, 0.15);
+  color: #9C7060;
+}
+
+/* MAIN CONTENT */
+.admin-main {
+  margin-left: 64px;
+  padding: 3rem;
+  flex: 1;
+  min-height: 100vh;
+  background: #0D0F0E;
+  transition: margin-left 0.3s ease, filter 0.3s ease;
+  width: calc(100% - 64px);
+}
+
+.admin-main.shifted {
+  margin-left: 260px;
+  width: calc(100% - 260px);
+  filter: blur(4px);
+  pointer-events: none;
+}
+
+.admin-section {
+  margin-bottom: 2rem;
+  max-width: 800px;
+}
+
+.admin-section h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #E8EDE9;
+  margin-bottom: 2rem;
+}
+
+.count {
+  color: #8A9E8D;
+  font-weight: 400;
+  font-size: 1rem;
+}
+
+/* MESSAGE CARDS */
+.message-card {
+  background: #131714;
+  border: 0.5px solid rgba(122, 158, 126, 0.15);
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+  transition: border-color 0.25s;
+}
+
+.message-card:hover {
+  border-color: rgba(122, 158, 126, 0.4);
+}
+
+.message-card.unread {
+  border-color: rgba(122, 158, 126, 0.4);
+  cursor: pointer;
+}
+
+.message-card.unread h3 {
+  color: var(--sage-light);
+  font-weight: 700;
+}
+
+.unread-dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--sage);
+  margin-left: 0.5rem;
+  vertical-align: middle;
+}
+
+.message-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.message-header h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #E8EDE9;
+  margin-bottom: 0.25rem;
+}
+
+.message-meta {
+  font-size: 0.85rem;
+  color: #8A9E8D;
+}
+
+.message-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.5rem;
+  flex-shrink: 0;
+  margin-left: 1rem;
+}
+
+.message-date {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.75rem;
+  color: #8A9E8D;
+  white-space: nowrap;
+}
+
+.message-body {
+  color: #8A9E8D;
+  font-size: 0.9rem;
+  line-height: 1.7;
+  border-left: 2px solid #3D2B20;
+  padding-left: 1rem;
+}
+
+.admin-item {
+  background: #131714;
+  border: 0.5px solid rgba(122, 158, 126, 0.15);
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 0.75rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: border-color 0.25s;
+}
+
+.admin-item:hover {
+  border-color: rgba(122, 158, 126, 0.3);
+}
+
+.admin-item h3 {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #E8EDE9;
+  margin-bottom: 0.25rem;
+}
+
+.admin-item p {
+  font-size: 0.8rem;
+  color: #8A9E8D;
+  font-family: 'Space Mono', monospace;
+}
+
+.delete-btn {
+  background: transparent;
+  border: 0.5px solid rgba(107, 76, 59, 0.4);
+  color: #9C7060;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.4rem 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.delete-btn:hover {
+  background: #6B4C3B;
+  color: #E8EDE9;
+  border-color: #6B4C3B;
+}
+
+.admin-form {
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* ADMIN PARTICLES */
+.admin-particles {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.4;
+}
+
+@media (max-width: 768px) {
+  .admin-main {
+    padding: 2rem 1.5rem;
+  }
+}
+
+.admin-sidebar:not(.open) .admin-nav-btn {
+  pointer-events: none;
+}
+
+/* STATS OVERVIEW */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 1rem;
+  margin-bottom: 3rem;
+}
+
+.stat-card {
+  background: #131714;
+  border: 0.5px solid rgba(122, 158, 126, 0.15);
+  padding: 1.5rem;
+  transition: border-color 0.25s;
+}
+
+.stat-card:hover {
+  border-color: rgba(122, 158, 126, 0.4);
+}
+
+.stat-card.unread-stat {
+  border-color: rgba(122, 158, 126, 0.4);
+}
+
+.stat-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #8A9E8D;
+  margin-bottom: 0.75rem;
+}
+
+.stat-number {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #A8C5AC;
+  line-height: 1;
+}
+
+.stat-card.unread-stat .stat-number {
+  color: #7A9E7E;
+}
+
+.overview-shortcuts {
+  margin-top: 1rem;
+}
+
+.shortcut-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.shortcut-btn {
+  background: transparent;
+  border: 0.5px solid rgba(107, 76, 59, 0.4);
+  color: #9C7060;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.75rem 1.5rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.shortcut-btn:hover {
+  background: #6B4C3B;
+  color: #E8EDE9;
+  border-color: #6B4C3B;
 }

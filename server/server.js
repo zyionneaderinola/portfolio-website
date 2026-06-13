@@ -18,12 +18,10 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 app.use(cors());
 
-// Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI)
     .then(() => console.log('Connected to MongoDB'))
     .catch((err) => console.error('Error connecting to MongoDB:', err));
 
-// Nodemailer transporter
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -32,7 +30,6 @@ const transporter = nodemailer.createTransport({
     }
 });
 
-// Multer configuration
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, 'uploads/');
@@ -52,7 +49,6 @@ const fileFilter = (req, file, cb) => {
 
 const upload = multer({ storage, fileFilter });
 
-// Root route
 app.get('/', (req, res) => {
     res.send('Hello, Portfolio Server is Running!');
 });
@@ -78,7 +74,7 @@ app.post('/api/projects', async (req, res) => {
     }
 });
 
-// DELETE a project by ID
+// DELETE a project
 app.delete('/api/projects/:id', async (req, res) => {
     try {
         await Project.findByIdAndDelete(req.params.id);
@@ -88,7 +84,7 @@ app.delete('/api/projects/:id', async (req, res) => {
     }
 });
 
-// PUT - update a project by ID
+// PUT - update a project
 app.put('/api/projects/:id', async (req, res) => {
     try {
         const project = await Project.findByIdAndUpdate(
@@ -176,11 +172,31 @@ const verifyToken = (req, res, next) => {
     }
 };
 
-// Protected admin route — get all contact messages
+// GET all messages (protected)
 app.get('/api/admin/messages', verifyToken, async (req, res) => {
     try {
         const messages = await Contact.find().sort({ createdAt: -1 });
         res.json(messages);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// PATCH mark a message as read (protected)
+app.patch('/api/admin/messages/:id/read', verifyToken, async (req, res) => {
+    try {
+        await Contact.findByIdAndUpdate(req.params.id, { read: true });
+        res.json({ success: true });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// DELETE a message (protected)
+app.delete('/api/admin/messages/:id', verifyToken, async (req, res) => {
+    try {
+        await Contact.findByIdAndDelete(req.params.id);
+        res.json({ message: 'Message deleted successfully' });
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
@@ -283,8 +299,8 @@ app.get('/api/documents', (req, res) => {
     });
 });
 
-// DELETE a document
-app.delete('/api/documents/:filename', (req, res) => {
+// DELETE document — protected
+app.delete('/api/documents/:filename', verifyToken, (req, res) => {
     const fs = require('fs');
     const filePath = path.join(__dirname, 'uploads', req.params.filename);
     fs.unlink(filePath, (err) => {
@@ -295,7 +311,6 @@ app.delete('/api/documents/:filename', (req, res) => {
     });
 });
 
-// Serve uploaded files statically
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.listen(PORT, () => {

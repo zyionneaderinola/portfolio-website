@@ -7,9 +7,12 @@ import ProjectCard from './components/ProjectCard'
 import Contact from './components/Contact'
 import ParticleField from './components/ParticleField'
 import Documents from './components/Documents'
+import { useLocation } from 'react-router-dom'
 
 function App() {
   const [projects, setProjects] = useState([])
+  const location = useLocation()
+  const isHome = location.pathname === '/'
 
   useEffect(() => {
     fetch('http://localhost:3000/api/projects')
@@ -19,19 +22,21 @@ function App() {
 
   return (
     <div style={{ position: 'relative' }}>
-      
-      {/* Global particle background */}
-      <div style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        width: '100%',
-        height: '100%',
-        zIndex: 0,
-        pointerEvents: 'none'
-      }}>
-        <ParticleField />
-      </div>
+
+      {/* Particles ONLY on home page */}
+      {isHome && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          zIndex: 0,
+          pointerEvents: 'none'
+        }}>
+          <ParticleField />
+        </div>
+      )}
 
       {/* All page content sits on top */}
       <div style={{ position: 'relative', zIndex: 1 }}>
@@ -40,10 +45,9 @@ function App() {
         <div className="divider"></div>
         <Skills />
         <div className="divider"></div>
-        <section className="section" id="projects">
         <Documents />
         <div className="divider"></div>
-        <section className="section" id="projects"></section>
+        <section className="section" id="projects">
           <p className="section-label">Work</p>
           <h2>My Projects</h2>
           <div className="projects-grid">
@@ -52,6 +56,7 @@ function App() {
             ))}
           </div>
         </section>
+        <div className="divider"></div>
         <Contact />
         <footer>
           <p>© 2026 Zyionne Aderinola</p>

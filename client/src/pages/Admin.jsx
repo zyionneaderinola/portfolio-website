@@ -368,12 +368,12 @@ function Admin() {
             </div>
             <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
               <a
-                href={`https://portfolio-website-dngm.onrender.com${doc.path}`}
+                href={doc.url || doc.path}
                 target="_blank"
                 rel="noreferrer"
                 className="read-btn"
               >
-              View
+                View
               </a>
               <button
               className="delete-btn"

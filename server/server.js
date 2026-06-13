@@ -48,12 +48,21 @@ const transporter = nodemailer.createTransport({
     }
 });
 
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, 'uploads/');
-    },
-    filename: (req, file, cb) => {
-        cb(null, Date.now() + '-' + file.originalname);
+const cloudinary = require('cloudinary').v2;
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
+
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET
+});
+
+const storage = new CloudinaryStorage({
+    cloudinary: cloudinary,
+    params: {
+        folder: 'portfolio-documents',
+        allowed_formats: ['pdf'],
+        resource_type: 'raw'
     }
 });
 
@@ -294,7 +303,6 @@ app.get('/api/contact', async (req, res) => {
     }
 });
 
-// POST upload a document
 app.post('/api/documents', upload.single('file'), (req, res) => {
     try {
         if (!req.file) {
@@ -304,43 +312,44 @@ app.post('/api/documents', upload.single('file'), (req, res) => {
             message: 'File uploaded successfully',
             filename: req.file.filename,
             originalname: req.file.originalname,
-            path: `/uploads/${req.file.filename}`
+            path: req.file.path,
+            url: req.file.path
         });
     } catch (err) {
         res.status(400).json({ error: err.message });
     }
 });
 
-// GET list all uploaded documents
-app.get('/api/documents', (req, res) => {
-    const fs = require('fs');
-    const uploadsDir = path.join(__dirname, 'uploads');
-    fs.readdir(uploadsDir, (err, files) => {
-        if (err) {
-            return res.status(500).json({ error: 'Could not read uploads folder' });
-        }
-        const pdfs = files.filter(f => f.endsWith('.pdf'));
-        res.json(pdfs.map(f => ({
-            filename: f,
-            originalname: f.replace(/^\d+-/, ''),
-            path: `/uploads/${f}`
-        })));
-    });
+app.get('/api/documents', async (req, res) => {
+    try {
+        const result = await cloudinary.api.resources({
+            type: 'upload',
+            prefix: 'portfolio-documents',
+            resource_type: 'raw'
+        });
+        const files = result.resources.map(file => ({
+            filename: file.public_id,
+            originalname: file.public_id.replace('portfolio-documents/', ''),
+            path: file.secure_url,
+            url: file.secure_url
+        }));
+        res.json(files);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 });
 
-// DELETE document — protected
-app.delete('/api/documents/:filename', verifyToken, (req, res) => {
-    const fs = require('fs');
-    const filePath = path.join(__dirname, 'uploads', req.params.filename);
-    fs.unlink(filePath, (err) => {
-        if (err) {
-            return res.status(500).json({ error: 'Could not delete file' });
-        }
+app.delete('/api/documents/:filename', verifyToken, async (req, res) => {
+    try {
+        const publicId = decodeURIComponent(req.params.filename);
+        await cloudinary.uploader.destroy(publicId, {
+            resource_type: 'raw'
+        });
         res.json({ message: 'File deleted successfully' });
-    });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 });
-
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 server.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);

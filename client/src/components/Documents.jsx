@@ -70,14 +70,14 @@ function Documents() {
                     {getDocumentLabel(doc.originalname)}
                   </span>
                 </div>
-               <a
-                  href={`https://portfolio-website-dngm.onrender.com${doc.path}`}
+                <a
+                  href={doc.url || doc.path}
                   target="_blank"
                   rel="noreferrer"
                   className="document-download"
-                >
-                  ↓ Download
-                </a>
+              >
+                 ↓ Download
+              </a>
               </div>
             ))
           )}

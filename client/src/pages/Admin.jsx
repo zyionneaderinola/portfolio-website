@@ -27,7 +27,7 @@ function Admin() {
   }, [])
 
   useEffect(() => {
-    const socket = io('http://localhost:3000')
+    const socket = io('https://portfolio-website-dngm.onrender.com')
 
     socket.on('newMessage', (data) => {
         setUnreadCount(prev => prev + 1)
@@ -50,7 +50,7 @@ function Admin() {
   }
 
   const fetchMessages = async () => {
-    const res = await fetch('http://localhost:3000/api/admin/messages', {
+    const res = await fetch('https://portfolio-website-dngm.onrender.com/api/admin/messages', {
       headers: authHeaders
     })
     const data = await res.json()
@@ -59,19 +59,19 @@ function Admin() {
   }
 
   const fetchProjects = async () => {
-    const res = await fetch('http://localhost:3000/api/projects')
+    const res = await fetch('https://portfolio-website-dngm.onrender.com/api/projects')
     const data = await res.json()
     setProjects(data)
   }
 
   const fetchDocuments = async () => {
-    const res = await fetch('http://localhost:3000/api/documents')
+    const res = await fetch('https://portfolio-website-dngm.onrender.com/api/documents')
     const data = await res.json()
     setDocuments(data)
   }
 
   const fetchSkills = async () => {
-    const res = await fetch('http://localhost:3000/api/skills')
+    const res = await fetch('https://portfolio-website-dngm.onrender.com/api/skills')
     const data = await res.json()
     setSkills(data)
   }
@@ -85,7 +85,7 @@ function Admin() {
   }
 
   const markAsRead = async (id) => {
-    await fetch(`http://localhost:3000/api/admin/messages/${id}/read`, {
+    await fetch(`https://portfolio-website-dngm.onrender.com/api/admin/messages/${id}/read`, {
         method: 'PATCH',
         headers: authHeaders
     })
@@ -97,7 +97,7 @@ function Admin() {
 
   const deleteMessage = async (id) => {
     const msg = messages.find(m => m._id === id)
-    await fetch(`http://localhost:3000/api/contact/${id}`, {
+    await fetch(`https://portfolio-website-dngm.onrender.com/api/contact/${id}`, {
       method: 'DELETE',
       headers: authHeaders
     })
@@ -106,7 +106,7 @@ function Admin() {
   }
 
   const deleteProject = async (id) => {
-    await fetch(`http://localhost:3000/api/projects/${id}`, {
+    await fetch(`https://portfolio-website-dngm.onrender.com/api/projects/${id}`, {
       method: 'DELETE',
       headers: authHeaders
     })
@@ -114,7 +114,7 @@ function Admin() {
   }
 
   const deleteDocument = async (filename) => {
-    await fetch(`http://localhost:3000/api/documents/${filename}`, {
+    await fetch(`https://portfolio-website-dngm.onrender.com/api/documents/${filename}`, {
         method: 'DELETE',
         headers: authHeaders
     })
@@ -123,7 +123,7 @@ function Admin() {
 
 
   const deleteSkill = async (id) => {
-    await fetch(`http://localhost:3000/api/skills/${id}`, {
+    await fetch(`https://portfolio-website-dngm.onrender.com/api/skills/${id}`, {
       method: 'DELETE',
       headers: authHeaders
     })
@@ -343,7 +343,7 @@ function Admin() {
                 const formData = new FormData()
                 formData.append('file', file)
                 try {
-                  const response = await fetch('http://localhost:3000/api/documents', {
+                  const response = await fetch('https://portfolio-website-dngm.onrender.com/api/documents', {
                   method: 'POST',
                   headers: { 'Authorization': `Bearer ${token}` },
                   body: formData
@@ -368,7 +368,7 @@ function Admin() {
             </div>
             <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
               <a
-                href={`http://localhost:3000${doc.path}`}
+                href={`https://portfolio-website-dngm.onrender.com${doc.path}`}
                 target="_blank"
                 rel="noreferrer"
                 className="read-btn"
@@ -453,7 +453,7 @@ function AddProjectForm({ token, onSuccess }) {
     }
 
     try {
-      const response = await fetch('http://localhost:3000/api/projects', {
+      const response = await fetch('https://portfolio-website-dngm.onrender.com/api/projects', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -531,7 +531,7 @@ function AddSkillForm({ token, onSuccess }) {
     }
 
     try {
-      const response = await fetch('http://localhost:3000/api/skills', {
+      const response = await fetch('https://portfolio-website-dngm.onrender.com/api/skills', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,

@@ -10,7 +10,7 @@ function Documents() {
   }, [])
 
   const fetchDocuments = () => {
-    fetch('http://localhost:3000/api/documents')
+    fetch('https://portfolio-website-dngm.onrender.com/api/documents')
       .then(res => res.json())
       .then(data => setDocuments(data))
   }
@@ -26,7 +26,7 @@ function Documents() {
     formData.append('file', file)
 
     try {
-      const response = await fetch('http://localhost:3000/api/documents', {
+      const response = await fetch('https://portfolio-website-dngm.onrender.com/api/documents', {
         method: 'POST',
         body: formData
       })
@@ -71,7 +71,7 @@ function Documents() {
                   </span>
                 </div>
                <a
-                  href={`http://localhost:3000${doc.path}`}
+                  href={`https://portfolio-website-dngm.onrender.com${doc.path}`}
                   target="_blank"
                   rel="noreferrer"
                   className="document-download"

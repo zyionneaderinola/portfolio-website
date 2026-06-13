@@ -119,7 +119,6 @@ nav ul li a:hover { color: var(--brown); }
   font-weight: 300;
   color: var(--text-muted);
   margin-bottom: 1.5rem;
-  text-align: justify;
 }
 
 .hero p {
@@ -128,6 +127,7 @@ nav ul li a:hover { color: var(--brown); }
   font-size: 1rem;
   line-height: 1.8;
   margin-bottom: 2.5rem;
+  text-align: justify;
 }
 
 .hero-cta {
